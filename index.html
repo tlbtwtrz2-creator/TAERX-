@@ -167,14 +167,6 @@ function register(){
         alert("كلمة المرور غير متطابقة");
         return;
     }
-
-    localStorage.setItem("userEmail", email);
-    localStorage.setItem("userPassword", password);
-
-    alert("تم إنشاء الحساب بنجاح");
-    showLogin();
-}
-
 function login(){
     let email = document.getElementById("loginEmail").value;
     let password = document.getElementById("loginPassword").value;
@@ -183,12 +175,20 @@ function login(){
     let savedPassword = localStorage.getItem("userPassword");
 
     if(email === savedEmail && password === savedPassword){
-        alert("تم تسجيل الدخول بنجاح");
-    }else{
+        localStorage.setItem("isLoggedIn","true");
+        window.location.href = "dashboard.html";
+    } else {
+        alert("بيانات غير صحيحة");
+    }
+    
+    if(email === savedEmail && password === savedPassword){
+    localStorage.setIte
+}
         alert("بيانات غير صحيحة");
     }
 }
 </script>
 
 </body>
+
 </html>
