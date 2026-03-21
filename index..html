@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure App</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600&display=swap" rel="stylesheet">
+<style>
+body{
+margin:0;
+font-family:'Cairo',sans-serif;
+background:#0b0f19;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
+}
+.app{
+width:380px;
+background:#121826;
+border-radius:28px;
+padding:35px;
+box-shadow:0 20px 60px rgba(0,0,0,0.6);
+}
+input{
+width:100%;
+padding:16px;
+margin-top:15px;
+border-radius:16px;
+border:none;
+background:#1f2937;
+color:white;
+}
+button{
+width:100%;
+padding:16px;
+margin-top:20px;
+border:none;
+border-radius:16px;
+font-weight:600;
+cursor:pointer;
+background:#fcd535;
+color:black;
+}
+.link{
+text-align:center;
+margin-top:12px;
+font-size:13px;
+color:#9ca3af;
+cursor:pointer;
+}
+.msg{
+text-align:center;
+margin-top:10px;
+font-size:13px;
+}
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div id="loginBox">
+<input type="email" id="email" placeholder="البريد الإلكتروني">
+<input type="password" id="password" placeholder="كلمة المرور">
+<button onclick="login()">تسجيل الدخول</button>
+<div class="link" onclick="showRegister()">إنشاء حساب</div>
+<div class="link" onclick="resetPassword()">نسيت كلمة المرور؟</div>
+<div class="msg" id="msg"></div>
+</div>
+
+<div id="registerBox" class="hidden">
+<input type="email" id="regEmail" placeholder="البريد الإلكتروني">
+<input type="password" id="regPassword" placeholder="كلمة المرور">
+<button onclick="register()">إنشاء الحساب</button>
+<div class="link" onclick="showLogin()">رجوع</div>
+<div class="msg" id="regMsg"></div>
+</div>
+
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "ضع_apiKey_هنا",
+  authDomain: "ضع_authDomain_هنا",
+  projectId: "ضع_projectId_هنا",
+  appId: "ضع_appId_هنا"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+function showRegister(){
+document.getElementById("loginBox").classList.add("hidden");
+document.getElementById("registerBox").classList.remove("hidden");
+}
+
+function showLogin(){
+document.getElementById("registerBox").classList.add("hidden");
+document.getElementById("loginBox").classList.remove("hidden");
+}
+
+function register(){
+let email=document.getElementById("regEmail").value;
+let password=document.getElementById("regPassword").value;
+
+auth.createUserWithEmailAndPassword(email,password)
+.then(()=>{
+document.getElementById("regMsg").innerText="تم إنشاء الحساب بنجاح";
+})
+.catch(error=>{
+document.getElementById("regMsg").innerText=error.message;
+});
+}
+
+function login(){
+let email=document.getElementById("email").value;
+let password=document.getElementById("password").value;
+
+auth.signInWithEmailAndPassword(email,password)
+.then(()=>{
+document.getElementById("msg").innerText="تم تسجيل الدخول";
+})
+.catch(error=>{
+document.getElementById("msg").innerText=error.message;
+});
+}
+
+function resetPassword(){
+let email=document.getElementById("email").value;
+
+if(!email){
+document.getElementById("msg").innerText="أدخل بريدك أولاً";
+return;
+}
+
+auth.sendPasswordResetEmail(email)
+.then(()=>{
+document.getElementById("msg").innerText="تم إرسال رابط إعادة التعيين إلى الإيميل";
+})
+.catch(error=>{
+document.getElementById("msg").innerText=error.message;
+});
+}
+</script>
+
+</body>
+</html>
